@@ -52,9 +52,3 @@ function getResource(music){
 	const resource = createAudioResource(stream);
 	return resource;
 }
-
-
-/**
- * TO DO :
- * empty queue when bot disconnect -> once?
- */
