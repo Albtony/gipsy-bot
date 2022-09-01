@@ -22,7 +22,7 @@ module.exports = {
 		};
 		bot.musicQueue.push(music);
 
-		if (!bot.voiceConnection) {
+		if (!bot.voiceConnection || bot.voiceConnection._state.status == "disconnected") {
 			await connectVoice(bot, message);
 			musicStart(bot, message);
 		}
