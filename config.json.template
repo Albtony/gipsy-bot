@@ -1,5 +1,5 @@
 {
-  "TOKEN": "",
-  "PREFIX": "",
-  "OWNERSID": []
+  "TOKEN": "<bot token>",
+  "PREFIX": "<prefix>",
+  "OWNERSID": ["<ownerid1>", "<ownerid2>"]
 }
