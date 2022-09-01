@@ -20,7 +20,7 @@ module.exports={
 		const player = createAudioPlayer();
 
 		let music = bot.musicQueue[0];
-		await player.play(getResource(music.url));
+		player.play(getResource(music.url));
 
 		player
 			.on('error', (error) => {
