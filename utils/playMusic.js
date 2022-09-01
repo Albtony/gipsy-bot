@@ -25,7 +25,6 @@ module.exports={
 		player
 			.on('error', (error) => {
 				message.channel.send('something went wrong!');
-				console.log('error1: ');
 				console.error(error);
 			})
 			.addListener('stateChange', async (oldOne, newOne) => {
