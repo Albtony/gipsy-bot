@@ -20,11 +20,7 @@ module.exports = {
 			duration: videoInfo.lengthSeconds,
 			url: videoInfo.video_url
 		};
-
 		bot.musicQueue.push(music);
-		// for (const music of bot.musicQueue) {
-		// 	console.log(music);
-		// }
 
 		if (!bot.voiceConnection) {
 			connectVoice(bot, message).then(musicStart(bot, message));
