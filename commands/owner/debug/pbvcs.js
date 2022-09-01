@@ -1,9 +1,7 @@
-const G = require("glob");
-
 module.exports = {
-	name: 'pbvc',
+	name: 'pbvcs',
 	aliases: [],
-	description: 'prints bot voice connection',
+	description: 'prints bot voice connection status',
 	ownerOnly: true,
 	hidden: true,
 	
@@ -11,7 +9,7 @@ module.exports = {
         if (!bot.voiceConnection) {
             message.channel.send("there is no bvc");
         } else {
-            console.log(bot.voiceConnection._state.status);
+            console.log(bot.voiceConnection);
         }
 	}
 };
