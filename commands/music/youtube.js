@@ -23,7 +23,8 @@ module.exports = {
 		bot.musicQueue.push(music);
 
 		if (!bot.voiceConnection) {
-			connectVoice(bot, message).then(musicStart(bot, message));
+			await connectVoice(bot, message);
+			musicStart(bot, message);
 		}
 	}
 };
