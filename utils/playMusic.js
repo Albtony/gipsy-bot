@@ -9,7 +9,7 @@ const {
 
 module.exports={
 	connectVoice: async (bot, message) => {
-		bot.voiceConnection = await joinVoiceChannel({
+		bot.voiceConnection = joinVoiceChannel({
 			channelId: message.member.voice.channel.id,
 			guildId: message.guild.id,
 			adapterCreator: message.guild.voiceAdapterCreator
@@ -40,7 +40,7 @@ module.exports={
 					player.play(getResource(music.url));
 				}
 			});
-				
+		
 		bot.voiceConnection.subscribe(player);
 	}
 };
