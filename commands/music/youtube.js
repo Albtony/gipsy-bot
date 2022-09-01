@@ -20,12 +20,11 @@ module.exports = {
 			duration: videoInfo.lengthSeconds,
 			url: videoInfo.video_url
 		};
-
 		bot.musicQueue.push(music);
-		console.log('music queue :\n', bot.musicQueue);
 
-		if (!bot.voiceConnection) {
-			connectVoice(bot, message).then(musicStart(bot, message));
+		if (!bot.voiceConnection || bot.voiceConnection._state.status == "disconnected") {
+			await connectVoice(bot, message);
+			musicStart(bot, message);
 		}
 	}
 };
