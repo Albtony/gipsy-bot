@@ -35,12 +35,13 @@ module.exports={
 						message.channel.send('music finished');
 						bot.musicQueue.shift();
 						music = bot.musicQueue[0];
-
 						if (!music) {
+							message.channel.send('queue finished');
 							bot.voiceConnection.destroy();
+							bot.voiceConnection = null;
 							return;
 						}
-						await player.play(getResource(music.url));
+						player.play(getResource(music.url));
 					}
 				});
 				
