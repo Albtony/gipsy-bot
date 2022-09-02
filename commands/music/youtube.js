@@ -109,5 +109,5 @@ function generatePlayEmbed(music) {
 		.setColor('#9fef00')
 		.setTitle('Now Playing')
 		.setDescription(`**[${music.title}](${music.url})**`)
-		.setFooter({ text: `Song Duration ${formatTime(music.duration)}` });
+		.setFooter({ text: `Song Duration ${formatTime(music.duration-1)}` });
 }
