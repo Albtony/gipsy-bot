@@ -18,30 +18,31 @@ module.exports={
 
 	musicStart: async (bot, message) => {
 		const player = createAudioPlayer();
-
-		let music = bot.musicQueue[0];
-		player.play(getResource(music.url));
-
 		player
-			.on('error', (error) => {
-				message.channel.send('something went wrong!');
-				console.error(error);
-			})
-			.addListener('stateChange', async (oldOne, newOne) => {
-				if (newOne.status == 'idle') {
-					message.channel.send('music finished');
-					bot.musicQueue.shift();
+			.addListener('stateChange', async (oldState, newState) => {
+				if (newState.status == 'idle' || newState.status == 'start') {
+					if (newState.status == 'idle') {
+						message.channel.send('music finished');
+					}
+					
 					music = bot.musicQueue[0];
+					bot.musicQueue.shift();
 					if (!music) {
 						bot.voiceConnection.destroy();
 						bot.voiceConnection = null;
 						return;
 					}
+
 					player.play(getResource(music.url));
 				}
+			})
+			.on('error', (error) => {
+				message.channel.send('something went wrong!');
+				console.error(error);
 			});
-		
+			
 		bot.voiceConnection.subscribe(player);
+		player.emit('stateChange', {status: undefined}, {status: 'start'});
 	}
 };
 
