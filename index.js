@@ -12,7 +12,10 @@ bot.voiceConnection;
 bot.commands = new Collection();
 bot.slashCommands = new Collection();
 
-bot.musicQueue = [];
+bot.musicQueue = {
+    queue: [],
+    loop: false
+};
 
 // reacts on event
 hotLoadEvents(bot);

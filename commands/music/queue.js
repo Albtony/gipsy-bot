@@ -4,35 +4,47 @@ module.exports = {
 	name: 'queue',
 	aliases: [ 'mq' ],
 	description: 'prints current music queue',
-	ownerOnly: true,
-	hidden: true,
+	ownerOnly: false,
+	hidden: false,
 	
 	run: (bot, message, args) => {
-		let queueMsg = '';
-		let orderNum = 1 ;
-
-		for (let music of bot.musicQueue) {
-			queueMsg += `${orderNum++}` + ' - ' + `${music.title}` + '\n';
+		let description = '';
+		let queue = bot.musicQueue.queue;
+		let totalDuration = calcTotalDuration(queue);
+		for (const music of queue) {
+			let entry = `⦁ [${music.title}](${music.url}) [${formatTime(music.duration)}]\n`;
+			description += entry;
 		}
 
-		const embedstuff = generateEmbedMessage(bot, message, args);
-		message.channel.send(queueMsg);
-		message.channel.send({embeds: [ embedstuff ]});
+		const embedMsg = new MessageEmbed()
+			.setColor('#2ee7b6')
+			.setTitle('Music Queue')
+			.setDescription(description)
+			.setFooter({ text: `Total duration ${formatTime(totalDuration)}` });
+		message.channel.send({ embeds: [embedMsg] })
 	}
 };
 
-function generateEmbedMessage (bot, message, args) {
-	const embed = new MessageEmbed()
-		.setColor('#0099ff')
-		.setTitle('Some title')
-		.setURL('https://discord.js.org/')
-		.setDescription('Description here')
-		.setTimestamp()
-		.setFooter({ text: 'by gipsy-bot', iconURL: 'https://i.ibb.co/LQyyP93/gipsy-bot-image-modified.png' });
+function formatTime(duration) {
+	let hour = Math.trunc(duration / 3600);
+	let min = Math.trunc(duration / 60);
+	let sec = duration % 60;
 
-	return embed;
+	if(hour < 10) hour = `0${hour}`;
+	if(min < 10) min = `0${min}`;
+	if(sec < 10) sec = `0${sec}`;
+
+	if(hour > 0) {
+		return `${hour}:${min}:${sec}`;
+	}
+	
+	return `${min}:${sec}`;
 }
 
-/**
- * print embed queue with url and stuff
- */
+function calcTotalDuration(musicList) {
+	let totSec = 0;
+	for (const music of musicList) {
+		totSec += music.duration - 1;
+	}
+	return totSec;
+}
