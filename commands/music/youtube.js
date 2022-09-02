@@ -1,5 +1,10 @@
 const ytdl = require('ytdl-core');
-const { connectVoice, musicStart } = require('../../utils/playMusic');
+const { 
+	joinVoiceChannel,
+	createAudioPlayer,
+	createAudioResource
+} = require('@discordjs/voice');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	name: 'youtube',
@@ -28,3 +33,74 @@ module.exports = {
 		}
 	}
 };
+
+async function connectVoice(bot, message){
+	bot.voiceConnection = joinVoiceChannel({
+		channelId: message.member.voice.channel.id,
+		guildId: message.guild.id,
+		adapterCreator: message.guild.voiceAdapterCreator
+	});
+}
+
+async function musicStart(bot, message) {
+	const player = createAudioPlayer();
+	player
+		.addListener('stateChange', async (oldState, newState) => {
+			if (newState.status == 'idle' || newState.status == 'start') {	
+				music = bot.musicQueue[0];
+				bot.musicQueue.shift();
+
+				if (!music) {
+					bot.voiceConnection.destroy();
+					bot.voiceConnection = null;
+					return;
+				}
+
+				message.channel.send({ embeds: [getPlayEmbed(music)]});
+				player.play(getResource(music.url), { 
+					highWaterMark: 1024 * 1024 * 1,
+					type: 'opus' 
+				});
+			}
+		})
+		.on('error', (error) => {
+			message.channel.send('something went wrong!');
+			console.error(error);
+		});
+		
+	bot.voiceConnection.subscribe(player);
+	player.emit('stateChange', {status: undefined}, {status: 'start'});
+}
+
+function getResource(music) {
+	const stream = ytdl(music, {
+		filter: 'audioonly'
+	});
+	const resource = createAudioResource(stream);
+	return resource;
+}
+
+function getSongDuration(music) {
+	const duration = music.duration - 1;
+	let hour = Math.trunc(duration / 3600);
+	let min = Math.trunc(duration / 60);
+	let sec = duration % 60;
+
+	if(hour < 10) hour = `0${hour}`;
+	if(min < 10) min = `0${min}`;
+	if(sec < 10) sec = `0${sec}`;
+
+	if(hour > 0) {
+		return `${hour}:${min}:${sec}`;
+	}
+	
+	return `${min}:${sec}`;
+}
+
+function getPlayEmbed(music) {
+	return new MessageEmbed()
+		.setColor('#9fef00')
+		.setTitle('Now Playing')
+		.setDescription(`**[${music.title}](${music.url})**`)
+		.setFooter({ text: `Length ${getSongDuration(music)}` });
+}
