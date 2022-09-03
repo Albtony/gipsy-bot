@@ -49,27 +49,27 @@ async function musicStart(bot, message) {
 	const player = createAudioPlayer();
 	player
 		.addListener('stateChange', async (oldState, newState) => {
-			if (newState.status == 'start') {
-				music = queue[0];
-				message.channel.send({ embeds: [generatePlayEmbed(music)]});
-				player.play(getResource(music.url), { 
-					highWaterMark: 1024 * 1024 * 1,
-					type: 'opus' 
-				});
-			} else if (newState.status == 'idle') {	
+			if (newState.status == 'idle') {	
 				queue.shift();
-				music = queue[0];
-				if (!music) {
-					bot.voiceConnection.destroy();
-					bot.voiceConnection = null;
-					return;
-				}
-				message.channel.send({ embeds: [generatePlayEmbed(music)]});
-				player.play(getResource(music.url), { 
-					highWaterMark: 1024 * 1024 * 1,
-					type: 'opus' 
-				});
+			} else if (newState.status == 'start'){
+				// do nothing and out from the if statement
+			} else {
+				// do nothing and terminate
+				return;
 			}
+
+			music = queue[0];
+			if (!music) {
+				bot.voiceConnection.destroy();
+				bot.voiceConnection = null;
+				return;
+			}
+
+			message.channel.send({ embeds: [generatePlayEmbed(music)]});
+			player.play(getResource(music.url), { 
+				highWaterMark: 1024 * 1024 * 1,
+				type: 'opus' 
+			});
 		})
 		.on('error', (error) => {
 			message.channel.send('something went wrong!');
