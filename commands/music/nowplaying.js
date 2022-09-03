@@ -8,6 +8,7 @@ module.exports = {
 	hidden: false,
 	
 	run: (bot, message, args) => {
+		let music = bot.musics.queue[0];
 		let playEmbed = new MessageEmbed()
 			.setColor('#9fef00')
 			.setTitle('Now Playing')

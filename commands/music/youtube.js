@@ -64,13 +64,7 @@ async function musicStart(bot, message, musics) {
 				return;
 			}
 
-			let playEmbed = new MessageEmbed()
-				.setColor('#9fef00')
-				.setTitle('Now Playing')
-				.setDescription(`**[${music.title}](${music.url})**`)
-				.setFooter({ text: `Song Duration ${formatTime(music.duration-1)}` });
-
-			message.channel.send({ embeds: [playEmbed] });
+			bot.commands.get('nowplaying').run(bot, message, '');
 			musics.player.play(getResource(music.url), { 
 				highWaterMark: 1024 * 1024 * 1,
 				type: 'opus' 
