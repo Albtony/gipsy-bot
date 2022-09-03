@@ -12,7 +12,8 @@ bot.voiceConnection;
 bot.commands = new Collection();
 bot.slashCommands = new Collection();
 
-bot.musicQueue = {
+bot.musics = {
+    player: '',
     queue: [],
     pos: 0,
     loop: false

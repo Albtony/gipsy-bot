@@ -14,7 +14,7 @@ module.exports = {
 	hidden: false,
         
 	run: async (bot, message, args) => {        
-		let queue = bot.musicQueue.queue;
+		let musics = bot.musics;
 		if (!message.member.voice.channel) {
 			message.reply('you\'re not in a voice channel you dumdum');
 			return;
@@ -26,11 +26,11 @@ module.exports = {
 			duration: videoInfo.lengthSeconds,
 			url: videoInfo.video_url
 		};
-		queue.push(music);
+		musics.queue.push(music);
 
 		if (!bot.voiceConnection || bot.voiceConnection._state.status == "disconnected") {
 			await connectVoice(bot, message);
-			musicStart(bot, message);
+			musicStart(bot, message, musics);
 		}
 	}
 };
@@ -43,16 +43,13 @@ async function connectVoice(bot, message){
 	});
 }
 
-async function musicStart(bot, message) {
-	const player = createAudioPlayer();
-	player
+async function musicStart(bot, message, musics) {
+	musics.player = createAudioPlayer();
+	musics.player
 		.addListener('stateChange', async (oldState, newState) => {
-			let queue = bot.musicQueue.queue;
-			let pos = calcPosition(bot.musicQueue);
-			const musicCount = queue.length;
-			const loop = bot.musicQueue.loop;
+			musics.pos = calcPosition(bot.musics);
 			if (newState.status == 'idle') {
-				queue = calcQueue(bot.musicQueue);
+				musics.queue = calcQueue(musics);
 			} else if (newState.status == 'start'){
 				// do nothing and out from the if statement
 			} else {
@@ -60,15 +57,21 @@ async function musicStart(bot, message) {
 				return;
 			}
 
-			music = queue[pos];
+			let music = musics.queue[musics.pos];
 			if (!music) {
 				bot.voiceConnection.destroy();
 				bot.voiceConnection = null;
 				return;
 			}
 
-			message.channel.send({ embeds: [getPlayEmbed(music)]});
-			player.play(getResource(music.url), { 
+			let playEmbed = new MessageEmbed()
+				.setColor('#9fef00')
+				.setTitle('Now Playing')
+				.setDescription(`**[${music.title}](${music.url})**`)
+				.setFooter({ text: `Song Duration ${formatTime(music.duration-1)}` });
+
+			message.channel.send({ embeds: [playEmbed] });
+			musics.player.play(getResource(music.url), { 
 				highWaterMark: 1024 * 1024 * 1,
 				type: 'opus' 
 			});
@@ -86,8 +89,8 @@ async function musicStart(bot, message) {
 			}
 		});
 		
-	bot.voiceConnection.subscribe(player);
-	player.emit('stateChange', {status: undefined}, {status: 'start'});
+	bot.voiceConnection.subscribe(musics.player);
+	musics.player.emit('stateChange', {status: undefined}, {status: 'start'});
 }
 
 function getResource(music) {
@@ -114,31 +117,21 @@ function formatTime(duration) {
 	return `${min}:${sec}`;
 }
 
-function getPlayEmbed(music) {
-	return new MessageEmbed()
-		.setColor('#9fef00')
-		.setTitle('Now Playing')
-		.setDescription(`**[${music.title}](${music.url})**`)
-		.setFooter({ text: `Song Duration ${formatTime(music.duration-1)}` });
+function calcPosition(musics) {
+	if (musics.loop) musics.pos++;
+	else musics.pos = 0;
+
+	if (musics.pos >= musics.queue.length) 
+		musics.pos = 0;
+
+	return musics.pos;
 }
 
-function calcPosition(musicQueue) {
-	const musicCount = musicQueue.queue.length;
-	const loop = musicQueue.loop;
+function calcQueue(musics) {
+	const currMusic = musics.queue.shift();
 
-	if (loop) musicQueue.pos++;
-	else musicQueue.pos = 0;
+	if (musics.loop) 
+		musics.queue.push(currMusic);
 
-	if (musicQueue.pos >= musicCount) 
-		musicQueue.pos = 0;
-
-	return musicQueue.pos;
-}
-
-function calcQueue(musicQueue) {
-	const loop = musicQueue.loop;
-	const currMusic = musicQueue.queue.shift();
-
-	if (loop) musicQueue.queue.push(currMusic);
-	return musicQueue.queue;
+	return musics.queue;
 }

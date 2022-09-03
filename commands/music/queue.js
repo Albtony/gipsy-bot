@@ -9,20 +9,20 @@ module.exports = {
 	
 	run: (bot, message, args) => {
 		let description = '';
-		let loop = bot.musicQueue.loop;
-		let queue = bot.musicQueue.queue;
+		let musics = bot.musics;
 		let totalDuration = calcTotalDuration(queue);
-		for (const music of queue) {
+		let formattedDuration = formatTime(totalDuration);
+		for (const music of musics.queue) {
 			let entry = `⦁ [${music.title}](${music.url}) [${formatTime(music.duration)}]\n`;
 			description += entry;
 		}
 
-		const embedMsg = new MessageEmbed()
+		const queueEmbed = new MessageEmbed()
 			.setColor('#2ee7b6')
 			.setTitle('Music Queue')
 			.setDescription(description)
-			.setFooter({ text: `Total duration ${formatTime(totalDuration)}   |   Loop: ${loop}` });
-		message.channel.send({ embeds: [embedMsg] })
+			.setFooter({ text: `Total duration ${formattedDuration}   |   Loop: ${musics.loop}` });
+		message.channel.send({ embeds: [queueEmbed] })
 	}
 };
 
