@@ -10,7 +10,7 @@ module.exports = {
 	run: (bot, message, args) => {
 		let description = '';
 		let musics = bot.musics;
-		let totalDuration = calcTotalDuration(queue);
+		let totalDuration = calcTotalDuration(musics.queue);
 		let formattedDuration = formatTime(totalDuration);
 		for (const music of musics.queue) {
 			let entry = `⦁ [${music.title}](${music.url}) [${formatTime(music.duration)}]\n`;
