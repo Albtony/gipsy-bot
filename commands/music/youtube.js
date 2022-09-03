@@ -44,13 +44,15 @@ async function connectVoice(bot, message){
 }
 
 async function musicStart(bot, message) {
-	let queue = bot.musicQueue.queue;
-	const loop = bot.musicQueue.loop;
 	const player = createAudioPlayer();
 	player
 		.addListener('stateChange', async (oldState, newState) => {
-			if (newState.status == 'idle') {	
-				queue.shift();
+			let queue = bot.musicQueue.queue;
+			let pos = calcPosition(bot.musicQueue);
+			const musicCount = queue.length;
+			const loop = bot.musicQueue.loop;
+			if (newState.status == 'idle') {
+				queue = calcQueue(bot.musicQueue);
 			} else if (newState.status == 'start'){
 				// do nothing and out from the if statement
 			} else {
@@ -58,14 +60,14 @@ async function musicStart(bot, message) {
 				return;
 			}
 
-			music = queue[0];
+			music = queue[pos];
 			if (!music) {
 				bot.voiceConnection.destroy();
 				bot.voiceConnection = null;
 				return;
 			}
 
-			message.channel.send({ embeds: [generatePlayEmbed(music)]});
+			message.channel.send({ embeds: [getPlayEmbed(music)]});
 			player.play(getResource(music.url), { 
 				highWaterMark: 1024 * 1024 * 1,
 				type: 'opus' 
@@ -74,6 +76,14 @@ async function musicStart(bot, message) {
 		.on('error', (error) => {
 			message.channel.send('something went wrong!');
 			console.error(error);
+			if(error.R) {
+				console.log('haaa');
+				console.error(error.R);
+			}
+			if(error.type) {
+				console.log('heee');
+				console.error(error.type);
+			}
 		});
 		
 	bot.voiceConnection.subscribe(player);
@@ -104,10 +114,31 @@ function formatTime(duration) {
 	return `${min}:${sec}`;
 }
 
-function generatePlayEmbed(music) {
+function getPlayEmbed(music) {
 	return new MessageEmbed()
 		.setColor('#9fef00')
 		.setTitle('Now Playing')
 		.setDescription(`**[${music.title}](${music.url})**`)
 		.setFooter({ text: `Song Duration ${formatTime(music.duration-1)}` });
+}
+
+function calcPosition(musicQueue) {
+	const musicCount = musicQueue.queue.length;
+	const loop = musicQueue.loop;
+
+	if (loop) musicQueue.pos++;
+	else musicQueue.pos = 0;
+
+	if (musicQueue.pos >= musicCount) 
+		musicQueue.pos = 0;
+
+	return musicQueue.pos;
+}
+
+function calcQueue(musicQueue) {
+	const loop = musicQueue.loop;
+	const currMusic = musicQueue.queue.shift();
+
+	if (loop) musicQueue.queue.push(currMusic);
+	return musicQueue.queue;
 }
