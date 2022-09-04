@@ -7,9 +7,9 @@ const {
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-	name: 'youtube',
-	aliases: [ 'yt' ],
-	description: 'play music from youtube',
+	name: 'play',
+	aliases: [ 'p' ],
+	description: 'plays music from youtube',
 	ownerOnly: false,
 	hidden: false,
         

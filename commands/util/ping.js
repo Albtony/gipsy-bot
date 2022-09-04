@@ -1,8 +1,8 @@
 module.exports = {
 	name: 'ping',
-	description: 'checks Bot and API ping',
+	description: 'prints Bot and API ping',
 	ownerOnly: false,
-	hidden: true,
+	hidden: false,
 	
 	run: (bot, message) => {
 		const botp = Date.now() - message.createdTimestamp;

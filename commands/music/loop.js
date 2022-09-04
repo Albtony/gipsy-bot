@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'loop',
 	aliases: [ 'l' ],
-	description: 'loops current music queue',
+	description: 'loops the current music queue',
 	ownerOnly: false,
 	hidden: false,
 	

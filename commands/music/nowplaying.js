@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'nowplaying',
 	aliases: [ 'np' ],
-	description: 'prints current music playing',
+	description: 'prints the current music playing',
 	ownerOnly: false,
 	hidden: false,
 	

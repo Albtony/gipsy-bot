@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'queue',
 	aliases: [ 'q' ],
-	description: 'prints current music queue',
+	description: 'prints current the music queue',
 	ownerOnly: false,
 	hidden: false,
 	
