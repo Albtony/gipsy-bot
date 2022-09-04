@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js');
+
 module.exports = {
 	name: 'help',
 	description: 'lists all command name and description',
