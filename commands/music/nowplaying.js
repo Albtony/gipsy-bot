@@ -3,22 +3,21 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'nowplaying',
 	aliases: [ 'np' ],
-	description: 'prints current music playing',
+	description: 'prints the current music playing',
 	ownerOnly: false,
 	hidden: false,
 	
 	run: (bot, message, args) => {
-		message.channel.send({ embeds: [generatePlayEmbed(music)] });
+		let music = bot.musics.queue[0];
+		let playEmbed = new MessageEmbed()
+			.setColor('#9fef00')
+			.setTitle('Now Playing')
+			.setDescription(`**[${music.title}](${music.url})**`)
+			.setFooter({ text: `Song Duration ${formatTime(music.duration-1)}` });
+		
+		message.channel.send({ embeds: [playEmbed] });
 	}
 };
-
-function generatePlayEmbed(music) {
-	return new MessageEmbed()
-		.setColor('#9fef00')
-		.setTitle('Now Playing')
-		.setDescription(`**[${music.title}](${music.url})**`)
-		.setFooter({ text: `Song Duration ${formatTime(music.duration-1)}` });
-}
 
 function formatTime(duration) {
 	let hour = Math.trunc(duration / 3600);

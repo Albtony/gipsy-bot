@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'pick',
-	description: 'randomly picks an element from items',
+	description: 'randomly picks an element from a given list',
 	ownerOnly: false,
 	hidden: false,
 	

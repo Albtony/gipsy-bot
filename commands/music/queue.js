@@ -2,26 +2,27 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	name: 'queue',
-	aliases: [ 'mq' ],
-	description: 'prints current music queue',
+	aliases: [ 'q' ],
+	description: 'prints current the music queue',
 	ownerOnly: false,
 	hidden: false,
 	
 	run: (bot, message, args) => {
 		let description = '';
-		let queue = bot.musicQueue.queue;
-		let totalDuration = calcTotalDuration(queue);
-		for (const music of queue) {
+		let musics = bot.musics;
+		let totalDuration = calcTotalDuration(musics.queue);
+		let formattedDuration = formatTime(totalDuration);
+		for (const music of musics.queue) {
 			let entry = `⦁ [${music.title}](${music.url}) [${formatTime(music.duration)}]\n`;
 			description += entry;
 		}
 
-		const embedMsg = new MessageEmbed()
+		const queueEmbed = new MessageEmbed()
 			.setColor('#2ee7b6')
 			.setTitle('Music Queue')
 			.setDescription(description)
-			.setFooter({ text: `Total duration ${formatTime(totalDuration)}` });
-		message.channel.send({ embeds: [embedMsg] })
+			.setFooter({ text: `Total duration ${formattedDuration}   |   Loop: ${musics.loop}` });
+		message.channel.send({ embeds: [queueEmbed] })
 	}
 };
 

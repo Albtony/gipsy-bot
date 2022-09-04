@@ -7,14 +7,14 @@ const {
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-	name: 'youtube',
-	aliases: [ 'yt' ],
-	description: 'play music from youtube',
+	name: 'play',
+	aliases: [ 'p' ],
+	description: 'plays music from youtube',
 	ownerOnly: false,
 	hidden: false,
         
 	run: async (bot, message, args) => {        
-		let queue = bot.musicQueue.queue;
+		let musics = bot.musics;
 		if (!message.member.voice.channel) {
 			message.reply('you\'re not in a voice channel you dumdum');
 			return;
@@ -26,11 +26,11 @@ module.exports = {
 			duration: videoInfo.lengthSeconds,
 			url: videoInfo.video_url
 		};
-		queue.push(music);
+		musics.queue.push(music);
 
 		if (!bot.voiceConnection || bot.voiceConnection._state.status == "disconnected") {
 			await connectVoice(bot, message);
-			musicStart(bot, message);
+			musicStart(bot, message, musics);
 		}
 	}
 };
@@ -43,14 +43,13 @@ async function connectVoice(bot, message){
 	});
 }
 
-async function musicStart(bot, message) {
-	let queue = bot.musicQueue.queue;
-	const loop = bot.musicQueue.loop;
-	const player = createAudioPlayer();
-	player
+async function musicStart(bot, message, musics) {
+	musics.player = createAudioPlayer();
+	musics.player
 		.addListener('stateChange', async (oldState, newState) => {
-			if (newState.status == 'idle') {	
-				queue.shift();
+			musics.pos = calcPosition(bot.musics);
+			if (newState.status == 'idle') {
+				musics.queue = calcQueue(musics);
 			} else if (newState.status == 'start'){
 				// do nothing and out from the if statement
 			} else {
@@ -58,15 +57,15 @@ async function musicStart(bot, message) {
 				return;
 			}
 
-			music = queue[0];
+			let music = musics.queue[musics.pos];
 			if (!music) {
 				bot.voiceConnection.destroy();
 				bot.voiceConnection = null;
 				return;
 			}
 
-			message.channel.send({ embeds: [generatePlayEmbed(music)]});
-			player.play(getResource(music.url), { 
+			bot.commands.get('nowplaying').run(bot, message, '');
+			musics.player.play(getResource(music.url), { 
 				highWaterMark: 1024 * 1024 * 1,
 				type: 'opus' 
 			});
@@ -74,10 +73,18 @@ async function musicStart(bot, message) {
 		.on('error', (error) => {
 			message.channel.send('something went wrong!');
 			console.error(error);
+			if(error.R) {
+				console.log('haaa');
+				console.error(error.R);
+			}
+			if(error.type) {
+				console.log('heee');
+				console.error(error.type);
+			}
 		});
 		
-	bot.voiceConnection.subscribe(player);
-	player.emit('stateChange', {status: undefined}, {status: 'start'});
+	bot.voiceConnection.subscribe(musics.player);
+	musics.player.emit('stateChange', {status: undefined}, {status: 'start'});
 }
 
 function getResource(music) {
@@ -104,10 +111,22 @@ function formatTime(duration) {
 	return `${min}:${sec}`;
 }
 
-function generatePlayEmbed(music) {
-	return new MessageEmbed()
-		.setColor('#9fef00')
-		.setTitle('Now Playing')
-		.setDescription(`**[${music.title}](${music.url})**`)
-		.setFooter({ text: `Song Duration ${formatTime(music.duration-1)}` });
+function calcPosition(musics) {
+	if (musics.loop) musics.pos++;
+	else musics.pos = 0;
+
+	if (musics.pos >= musics.queue.length) 
+		musics.pos = 0;
+
+	return musics.pos;
+}
+
+function calcQueue(musics) {
+	for (let i = 0; i < musics.skip; i++) {
+		const currMusic = musics.queue.shift();
+		if (musics.loop) musics.queue.push(currMusic);
+	}
+
+	musics.skip = 1;
+	return musics.queue;
 }

@@ -1,11 +1,11 @@
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-	name: 'help',
-	description: 'lists all command name and description',
-	ownerOnly: false,
-	hidden: false,
-
+	name: 'debug',
+	description: 'for debugging stuff',
+	ownerOnly: true,
+	hidden: true,
+	
 	run: (bot, message, args) => {
 		let commands = bot.commands;
 		let prefix = bot.config.PREFIX;

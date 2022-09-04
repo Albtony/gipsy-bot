@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'uptime',
-	description: 'prints bot\'s uptime in readable format',
+	description: 'prints the bot uptime in readable format',
 	ownerOnly: false,
 	hidden: false,
 	
