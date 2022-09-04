@@ -122,10 +122,11 @@ function calcPosition(musics) {
 }
 
 function calcQueue(musics) {
-	const currMusic = musics.queue.shift();
+	for (let i = 0; i < musics.skip; i++) {
+		const currMusic = musics.queue.shift();
+		if (musics.loop) musics.queue.push(currMusic);
+	}
 
-	if (musics.loop) 
-		musics.queue.push(currMusic);
-
+	musics.skip = 1;
 	return musics.queue;
 }
