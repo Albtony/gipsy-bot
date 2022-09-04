@@ -16,7 +16,7 @@ module.exports = {
         }
             
         if(skip == 1) message.channel.send(`\`skipping 1 song...\``);
-        else message.channel.send(`\`skipping ${skip} song...\``);
+        else message.channel.send(`\`skipping ${skip} songs...\``);
         musics.skip = parseInt(skip);
         musics.player.stop(true);
 	}
