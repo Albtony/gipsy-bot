@@ -8,6 +8,8 @@ module.exports = {
 	run: (bot, message, args) => {
         let musics = bot.musics;
         musics.queue = shuffle(musics.queue);
+        message.channel.send(`\`shuffling succesful:\``);
+        bot.commands.get('queue').run(bot, message, '');
 	}
 };
 
