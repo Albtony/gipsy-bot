@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'ping',
-	description: 'prints Bot and API ping',
+	description: 'prints the bot and discord API ping',
 	ownerOnly: false,
 	hidden: false,
 	
