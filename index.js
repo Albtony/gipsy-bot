@@ -13,7 +13,7 @@ bot.commands = new Collection();
 bot.slashCommands = new Collection();
 
 bot.musics = {
-    player: '',
+    player: null,
     queue: [],
     pos: 0,
     skipCount: 1,
