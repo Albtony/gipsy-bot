@@ -7,7 +7,7 @@ module.exports = {
 	ownerOnly: false,
 	hidden: false,
 	
-	run: (bot, message, args) => {
+	run: async (bot, message, args) => {
 		let music = bot.musics.queue[0];
 		let playEmbed = new MessageEmbed()
 			.setColor('#9fef00')
@@ -15,7 +15,7 @@ module.exports = {
 			.setDescription(`**[${music.title}](${music.url})**`)
 			.setFooter({ text: `Song Duration ${formatTime(music.duration-1)}` });
 		
-		message.channel.send({ embeds: [playEmbed] });
+		bot.musics.nowPlayingMsg = await message.channel.send({ embeds: [playEmbed] });
 	}
 };
 

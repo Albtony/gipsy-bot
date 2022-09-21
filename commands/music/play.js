@@ -64,6 +64,10 @@ async function musicStart(bot, message, musics) {
 				return;
 			}
 
+			if(bot.musics.nowPlayingMsg != null) {
+				bot.musics.nowPlayingMsg.delete();
+				bot.musics.nowPlayingMsg = null;
+			};
 			bot.commands.get('nowplaying').run(bot, message, '');
 			musics.player.play(getResource(music.url), { 
 				highWaterMark: 1024 * 1024 * 1,

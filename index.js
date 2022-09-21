@@ -14,6 +14,7 @@ bot.slashCommands = new Collection();
 
 bot.musics = {
     player: null,
+    nowPlayingMsg: null,
     queue: [],
     pos: 0,
     skipCount: 1,
