@@ -7,17 +7,17 @@ module.exports = {
 	
 	run: (bot, message, args) => {
         let musics = bot.musics;
-        let skip = args[0];
+        let skipCount = args[0];
 
-        if (!skip) skip = 1;
-        if (!isNumeric(skip) || skip > musics.queue.length || skip <= 0) {
+        if (!skipCount) skipCount = 1;
+        if (!isNumeric(skipCount) || skipCount > musics.queue.length || skipCount <= 0) {
             message.reply(`\`skip value is invalid\``);
             return;
         }
             
-        if(skip == 1) message.channel.send(`\`skipping 1 song...\``);
-        else message.channel.send(`\`skipping ${skip} songs...\``);
-        musics.skip = parseInt(skip);
+        if(skipCount == 1) message.channel.send(`\`skipping 1 song...\``);
+        else message.channel.send(`\`skipping ${skipCount} songs...\``);
+        musics.skip = parseInt(skipCount);
         musics.player.stop(true);
 	}
 };

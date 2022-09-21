@@ -16,7 +16,7 @@ bot.musics = {
     player: '',
     queue: [],
     pos: 0,
-    skip: 1,
+    skipCount: 1,
     loop: false
 };
 
