@@ -28,6 +28,7 @@ Copy or Rename `config.json.template` to `config.json` and fill out the values:<
 
 ## 📝 Features
 These are the current features of this bot:
+
 🎵 Music 🎵
 - play youtube video via link - `,,p or ,,play`
 - music queue system - `,,q or ,,queue`
@@ -36,15 +37,14 @@ These are the current features of this bot:
 - now playing - `,,np or ,,nowplaying`
 - skip x amount of song - `,,s or ,,s`
 
-✏️ util ✏️
+✏️ Util ✏️
 - lists all user command - `,,help`
 - prints your local time - `,,now`
 - picks random element from args - `,,pick`
 - checks discord and api latency - `,,ping`
 - checks bot uptime - `,,uptime`
 
-👨Owner👩
-And these are the owner/dev only command:
+👨 Owner/Dev Only 👩
 - terminate the bot - `,,killbot`
 - recompile any js file under commands directory - `,,hotload`
 - check wheter you are owner or not - `,,pingmedaddy`
