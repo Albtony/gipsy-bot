@@ -35,7 +35,7 @@ These are the current features of this bot:
 - loop queue - `,,l or ,,loop`
 - shuffle queue - `,,s or ,,shuffle`
 - now playing - `,,np or ,,nowplaying`
-- skip x amount of song - `,,s or ,,s`
+- skip x amount of song - `,,s or ,,skip`
 
 ✏️ Util ✏️
 - lists all user command - `,,help`
