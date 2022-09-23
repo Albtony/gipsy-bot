@@ -45,7 +45,7 @@ These are the current features of this bot:
 - checks bot uptime - `,,uptime`
 
 👨 Owner/Dev Only 👩
-- terminate the bot - `,,killbot`
-- recompile any js file under commands directory - `,,hotload`
-- check wheter you are owner or not - `,,pingmedaddy`
+- terminates the bot - `,,killbot`
+- recompiles any js file under commands directory - `,,hotload`
+- checks whether you are owner or not - `,,pingmedaddy`
 - a general function just for debugging stuff - `,,debug`
