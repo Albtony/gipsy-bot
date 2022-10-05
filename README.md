@@ -49,3 +49,13 @@ These are the current features of this bot:
 - recompiles any js file under commands directory - `,,hotload`
 - checks whether you are owner or not - `,,pingmedaddy`
 - a general function just for debugging stuff - `,,debug`
+
+## 📷 Bot in Action!
+
+<ul>
+  <li><img alt="demo-play" src="https://user-images.githubusercontent.com/78489357/194025580-4378aa5d-c8fa-4bcb-be92-6ec142c08372.png" height=154 width=500/>
+  <li><img alt="demo-queue" src="https://user-images.githubusercontent.com/78489357/194027059-6a888450-3d78-4687-a320-1da1d1b323d6.png" width=500/>
+  <li><img alt="demo-shuffle" src="https://user-images.githubusercontent.com/78489357/194027468-5266fb61-98ba-45b9-90b0-b255eb27efd6.png" width=500/>
+  <li><img alt="demo-help" src="https://user-images.githubusercontent.com/78489357/194027918-15a53b12-29ed-4bbe-8251-57e4f9481dc8.png" width=500/>
+  <li><img alt="demo-pingmedaddy" src="https://user-images.githubusercontent.com/78489357/194028298-a3ca05c0-e8af-4de7-b3e2-7f24d2e2fb25.png" width=500/>
+</ul>
