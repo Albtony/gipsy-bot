@@ -3,7 +3,7 @@ const { convertSecToDate } = require("./timeHandler")
 
 function getTotalLength(json){
 	var totalLength = 0;
-	json.forEach((value)=>{totalLength+=value.len})
+	json.forEach((value)=>{totalLength+=value.duration})
 	return totalLength;
 }
 
@@ -55,6 +55,15 @@ module.exports={
 				duration: "",
 				playlist: JSON.parse(readFileSync(`./playlist/${file}`))
 			}
+			tempPlaylist.playlist = tempPlaylist.playlist.map((value)=>{
+				return {
+					title: value.title,
+					url: value.url,
+					duration: value.len
+				}
+			})
+
+
 			tempPlaylist.duration = convertSecToDate(getTotalLength(tempPlaylist.playlist))
 			bot.localPlaylist.set(tempPlaylist.name, tempPlaylist)
 		}

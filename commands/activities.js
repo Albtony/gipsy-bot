@@ -21,7 +21,9 @@ module.exports = {
 	description: 'for fun activities',
 	hidden: true,
 	checkOwner: false,
-	execute(message, args) {
+	run(message, args) {
+		console.log(message)
+		console.log(message.member)
 		const { channel } = message.member.voice;
 
 		if (!channel){

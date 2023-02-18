@@ -1,5 +1,7 @@
 const { Client, Message, MessageEmbed } = require("discord.js");
 const { readdirSync, readFileSync } = require('node:fs');
+const { musicStart, connect } = require('../utils/playMusic')
+
 
 var listUsage=[
 	"usage: [prefix] playlist list",
@@ -43,7 +45,7 @@ module.exports = {
 	 * @param {String[]} args
 	 */
 	run: (bot, message, args) => {
-		if(!args[0]){message.channel.send(noArgumentError)}
+		if(!args[0]){return message.channel.send(noArgumentError)}
 
 		var anyUrlRegex = /^(https?:\/\/)/gi;
 
@@ -72,6 +74,10 @@ module.exports = {
 			
 			if(!tempPlaylist)return message.channel.send(`i dont think we have ${args[1]} playlist sir...`)
 			bot.musicQueue.push(...tempPlaylist.playlist)
+			if(!bot.connection){
+				connect(bot,message)
+				musicStart(bot, message)
+			}
 			return message.channel.send("musicLoaded")
 		}
 		else if(anyUrlRegex.test(args[0])){
@@ -81,4 +87,5 @@ module.exports = {
 			return message.channel.send(argumentError)
 		}
 	}
+	
 };

@@ -1,11 +1,7 @@
 // @ts-check
 const { Client, Message } = require("discord.js");
-try{
-	const { OUTPUT } = require("../preexistingOutput/sysinfoOutput");
-}
-catch(err){
-	const OUTPUT = "null (you have not created file for this command)";
-}
+const {readFileSync} = require("fs");
+
 
 
 module.exports = {
@@ -20,6 +16,14 @@ module.exports = {
 	 * @param {String[]} args
 	 */
 	run: (bot, message, args) => {
+		let OUTPUT = "null (you have not created file for this command)";
+		try{
+			let buffer = readFileSync("../preexistingOutput/sysinfoOutput");
+			OUTPUT = buffer.toString();
+		}
+		catch(err){
+			console.log("it doesnt exists")
+		}
 		// return sendAttachedEphemeral(message, "./preexistingOutput/test.txt")
 		return message.channel.send({content: "```\n"+OUTPUT+"\n```"})
 	}

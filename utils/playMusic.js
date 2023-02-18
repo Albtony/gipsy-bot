@@ -27,10 +27,13 @@ module.exports={
 
 	musicStart:async (bot, message)=>{
 		const player = createAudioPlayer();
+		bot.music_player = player;
 
 		try {
 			var music = bot.musicQueue[0]
-			await player.play(getResource(music.url))
+			bot.musicQueue.shift(1);
+			bot.current_music = music;
+			await player.play(getResource(bot.current_music.url))
 
 			player.on('error', error => {
 				message.channel.send("sumtin went rong wit de pleye la :V dunno what ah")
@@ -42,23 +45,55 @@ module.exports={
 					message.channel.send("music finished")
 					console.log("The song finished");
 					console.log(newOne);
-
-					bot.musicQueue.shift(1)
+					
 					var music = bot.musicQueue[0]
+					bot.musicQueue.shift(1)
 					if(!music){
-						bot.connection.unsubscribe(player);
+						setTimeout(() => {
+							if(!music){
+								setTimeout(() => bot.subscription.unsubscribe(), 5_000);
+								bot.connection.destroy();
+							}
+						}, 5_000);
+						if (bot.subscription) {
+							setTimeout(() => bot.subscription.unsubscribe(), 5_000);
+							bot.connection.destroy();
+						}
 						return;
 					}
-					await player.play(getResource(music.url));
+					bot.current_music = music;
+					await player.play(getResource(bot.current_music.url));
 				}
 			})
 
-			bot.connection.subscribe(player);
+			bot.subscription = bot.connection.subscribe(player);
 
 		} catch (error) {
 				message.channel.send("sumtin went rong wen setartin de peleye laaa")
 				console.log(error);
 		}
+	},
+	musicSkip: async(bot, message)=>{
+		const player = bot.music_player;
+		try{
+			var music = bot.musicQueue[0]
+			bot.musicQueue.shift(1);
+			bot.current_music = music;
+			await player.play(getResource(bot.current_music.url));
+		}catch(err){
+			console.log(err);
+		}
+	},
 
+	musicSkipTo: async(bot, message, index)=>{
+		const player = bot.music_player;
+		try{
+			var music = bot.musicQueue[index-1]
+			bot.musicQueue = bot.musicQueue.splice(index,(bot.musicQueue.length));
+			bot.current_music = music;
+			await player.play(getResource(bot.current_music.url));
+		}catch(err){
+			console.log(err);
+		}
 	}
 }

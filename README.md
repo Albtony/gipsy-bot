@@ -1,6 +1,6 @@
 # gipsy-bot
 
-repository for my in-progress experimental gipsy-bot
+repository for my in-progress experimental gipsy-bot, note that this might not be the most stable bot since the music player can sometimes bugged out
 
 ## todos
 
@@ -13,7 +13,17 @@ repository for my in-progress experimental gipsy-bot
   - [x] basic: calculator
   - [ ] inter: debug
   - [x] inter: sysinfo
+  - [x] inter: fun command
+    - [x] inter: calculator (mathfs)
+    - [x] inter: read from replies (dipanggilbro)
+    - [x] inter: 3rd party api (cerahkantemansaya)
   - [x] advan: hotReload (hot reload all command so no need to restart server)
+  - [x] advan: music player
+    - [x] advan: load playlist
+    - [x] advan: skip
+    - [x] advan: skipto
+    - [x] advan: queue
+    - [x] advan: shuffle
 
 - [x] add event modularity
 - [x] add events

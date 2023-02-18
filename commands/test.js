@@ -4,6 +4,7 @@ module.exports = {
 	hidden: false,
 	checkOwner: false,
 	run: (bot, message, args) => {
+		console.log(message.mentions.repliedUser);
 		// seems to work... LETS GOOOO
 	}
 };
